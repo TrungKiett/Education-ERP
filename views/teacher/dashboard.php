@@ -11,17 +11,17 @@ $daysOfWeek = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Th�
     <!-- View Tabs -->
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
-            <a class="nav-link <?php echo $view === 'today' ? 'active' : ''; ?>" href="index.php?action=teacher.dashboard&view=today&date=<?php echo $today; ?>">
+            <a class="nav-link <?php echo $view === 'today' ? 'active' : ''; ?>" href="?action=teacher.dashboard&view=today&date=<?php echo $today; ?>">
                 <i class="bi bi-calendar-day"></i> Hôm nay
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?php echo $view === 'week' ? 'active' : ''; ?>" href="index.php?action=teacher.dashboard&view=week&date=<?php echo $currentDate; ?>">
+            <a class="nav-link <?php echo $view === 'week' ? 'active' : ''; ?>" href="?action=teacher.dashboard&view=week&date=<?php echo $currentDate; ?>">
                 <i class="bi bi-calendar-week"></i> Tuần này
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?php echo $view === 'month' ? 'active' : ''; ?>" href="index.php?action=teacher.dashboard&view=month&date=<?php echo $currentDate; ?>">
+            <a class="nav-link <?php echo $view === 'month' ? 'active' : ''; ?>" href="?action=teacher.dashboard&view=month&date=<?php echo $currentDate; ?>">
                 <i class="bi bi-calendar-month"></i> Tháng này
             </a>
         </li>

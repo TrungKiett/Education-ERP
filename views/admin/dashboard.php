@@ -19,7 +19,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <i class="bi bi-person-badge" style="font-size: 3rem; opacity: 0.5;"></i>
                         </div>
                     </div>
-                    <a href="index.php?action=admin.teachers" class="text-white text-decoration-none">
+                    <a href="?action=admin.teachers" class="text-white text-decoration-none">
                         Xem chi tiết <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -38,7 +38,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <i class="bi bi-people" style="font-size: 3rem; opacity: 0.5;"></i>
                         </div>
                     </div>
-                    <a href="index.php?action=admin.students" class="text-white text-decoration-none">
+                    <a href="?action=admin.students" class="text-white text-decoration-none">
                         Xem chi tiết <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -57,7 +57,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <i class="bi bi-building" style="font-size: 3rem; opacity: 0.5;"></i>
                         </div>
                     </div>
-                    <a href="index.php?action=admin.classrooms" class="text-white text-decoration-none">
+                    <a href="?action=admin.classrooms" class="text-white text-decoration-none">
                         Xem chi tiết <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -76,7 +76,7 @@ require_once __DIR__ . '/../layouts/header.php';
                             <i class="bi bi-book" style="font-size: 3rem; opacity: 0.5;"></i>
                         </div>
                     </div>
-                    <a href="index.php?action=admin.subjects" class="text-white text-decoration-none">
+                    <a href="?action=admin.subjects" class="text-white text-decoration-none">
                         Xem chi tiết <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -93,32 +93,32 @@ require_once __DIR__ . '/../layouts/header.php';
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <a href="index.php?action=admin.teachers" class="btn btn-outline-primary w-100">
+                            <a href="?action=admin.teachers" class="btn btn-outline-primary w-100">
                                 <i class="bi bi-person-badge"></i> Quản lý Giáo viên
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="index.php?action=admin.students" class="btn btn-outline-success w-100">
+                            <a href="?action=admin.students" class="btn btn-outline-success w-100">
                                 <i class="bi bi-people"></i> Quản lý Học sinh
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="index.php?action=admin.classrooms" class="btn btn-outline-info w-100">
+                            <a href="?action=admin.classrooms" class="btn btn-outline-info w-100">
                                 <i class="bi bi-building"></i> Quản lý Lớp học
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="index.php?action=admin.subjects" class="btn btn-outline-warning w-100">
+                            <a href="?action=admin.subjects" class="btn btn-outline-warning w-100">
                                 <i class="bi bi-book"></i> Quản lý Môn học
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="index.php?action=admin.schedules" class="btn btn-outline-secondary w-100">
+                            <a href="?action=admin.schedules" class="btn btn-outline-secondary w-100">
                                 <i class="bi bi-calendar-check"></i> Phân công Lịch dạy
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="index.php?action=admin.teacherSubjects" class="btn btn-outline-dark w-100">
+                            <a href="?action=admin.teacherSubjects" class="btn btn-outline-dark w-100">
                                 <i class="bi bi-person-workspace"></i> Gán Môn dạy
                             </a>
                         </div>

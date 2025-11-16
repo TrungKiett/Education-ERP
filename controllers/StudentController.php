@@ -31,7 +31,7 @@ class StudentController extends BaseController {
         $userStmt->close();
         
         if (!$studentId) {
-            $this->redirect('index.php?action=logout');
+            $this->redirect('?action=logout');
             return;
         }
         

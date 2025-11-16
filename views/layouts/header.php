@@ -27,7 +27,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="/">
                 <i class="bi bi-mortarboard"></i> Hệ thống quản lý giáo dục
             </a>
             <?php if (isLoggedIn()): ?>
@@ -36,7 +36,7 @@
                     <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars(getCurrentUsername()); ?> 
                     (<?php echo ucfirst(getCurrentRole()); ?>)
                 </span>
-                <a class="btn btn-outline-light btn-sm" href="index.php?action=logout">
+                <a class="btn btn-outline-light btn-sm" href="?action=logout">
                     <i class="bi bi-box-arrow-right"></i> Đăng xuất
                 </a>
             </div>

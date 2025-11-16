@@ -14,7 +14,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
                     <?php endif; ?>
                     
-                    <form method="POST" action="index.php?action=login">
+                    <form method="POST" action="?action=login">
                         <div class="mb-3">
                             <label for="username" class="form-label">Tên đăng nhập</label>
                             <input type="text" class="form-control" id="username" name="username" required autofocus>
@@ -30,7 +30,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     
                     <div class="mt-3 text-center">
                         <p class="text-muted small">Mặc định: admin / admin123</p>
-                        <p class="text-muted">Chưa có tài khoản? <a href="index.php?action=register">Đăng ký ngay</a></p>
+                        <p class="text-muted">Chưa có tài khoản? <a href="?action=register">Đăng ký ngay</a></p>
                     </div>
                 </div>
             </div>

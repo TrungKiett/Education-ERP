@@ -25,14 +25,14 @@ abstract class BaseController {
     
     protected function requireLogin() {
         if (!isLoggedIn()) {
-            $this->redirect('index.php?action=login');
+            $this->redirect('?action=login');
         }
     }
     
     protected function requireRole($role) {
         $this->requireLogin();
         if (!hasRole($role)) {
-            $this->redirect('index.php');
+            $this->redirect('/');
         }
     }
     

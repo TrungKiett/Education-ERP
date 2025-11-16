@@ -126,17 +126,17 @@ class AuthController extends BaseController {
         }
         
         session_destroy();
-        $this->redirect('index.php?action=login');
+        $this->redirect('?action=login');
     }
     
     private function redirectToDashboard() {
         $role = getCurrentRole();
         if ($role === 'admin') {
-            $this->redirect('index.php?action=admin.dashboard');
+            $this->redirect('?action=admin.dashboard');
         } elseif ($role === 'teacher') {
-            $this->redirect('index.php?action=teacher.dashboard');
+            $this->redirect('?action=teacher.dashboard');
         } elseif ($role === 'student') {
-            $this->redirect('index.php?action=student.dashboard');
+            $this->redirect('?action=student.dashboard');
         }
     }
 }

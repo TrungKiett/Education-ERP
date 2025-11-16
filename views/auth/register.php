@@ -20,12 +20,12 @@ require_once __DIR__ . '/../layouts/header.php';
                     <div class="alert alert-success">
                         <i class="bi bi-check-circle"></i> <?php echo htmlspecialchars($success); ?>
                         <div class="mt-2">
-                            <a href="index.php?action=login" class="btn btn-sm btn-primary">Đi đến trang đăng nhập</a>
+                            <a href="?action=login" class="btn btn-sm btn-primary">Đi đến trang đăng nhập</a>
                         </div>
                     </div>
                     <?php endif; ?>
                     
-                    <form method="POST" action="index.php?action=register">
+                    <form method="POST" action="?action=register">
                         <?php
                         $formFullName = isset($_POST['full_name']) ? htmlspecialchars($_POST['full_name']) : '';
                         $formUsername = isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '';
@@ -106,7 +106,7 @@ require_once __DIR__ . '/../layouts/header.php';
                     </form>
                     
                     <div class="mt-3 text-center">
-                        <p class="text-muted">Đã có tài khoản? <a href="index.php?action=login">Đăng nhập ngay</a></p>
+                        <p class="text-muted">Đã có tài khoản? <a href="?action=login">Đăng nhập ngay</a></p>
                     </div>
                 </div>
             </div>

@@ -30,7 +30,7 @@ function isStudent() {
 // Require login
 function requireLogin() {
     if (!isLoggedIn()) {
-        header('Location: login.php');
+        header('Location: /?action=login');
         exit();
     }
 }
@@ -39,7 +39,7 @@ function requireLogin() {
 function requireRole($role) {
     requireLogin();
     if (!hasRole($role)) {
-        header('Location: index.php');
+        header('Location: /');
         exit();
     }
 }
