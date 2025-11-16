@@ -1,22 +1,74 @@
 <?php
+// MVC Router - Entry point
+require_once 'config/database.php';
 require_once 'config/session.php';
+require_once 'models/Database.php';
 
-if (!isLoggedIn()) {
-    header('Location: login.php');
-    exit();
+// Autoload controllers
+spl_autoload_register(function ($class) {
+    $paths = [
+        __DIR__ . '/controllers/' . $class . '.php',
+        __DIR__ . '/models/' . $class . '.php'
+    ];
+    
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+            return;
+        }
+    }
+});
+
+// Get action from URL
+$action = $_GET['action'] ?? 'dashboard';
+
+// Route to appropriate controller
+$parts = explode('.', $action);
+$controllerName = ucfirst($parts[0]) . 'Controller';
+$method = $parts[1] ?? 'index';
+
+// Default routing
+if ($action === 'dashboard' || $action === '') {
+    if (isLoggedIn()) {
+        $role = getCurrentRole();
+        if ($role === 'admin') {
+            $action = 'admin.dashboard';
+        } elseif ($role === 'teacher') {
+            $action = 'teacher.dashboard';
+        } elseif ($role === 'student') {
+            $action = 'student.dashboard';
+        } else {
+            $action = 'login';
+        }
+    } else {
+        $action = 'login';
+    }
 }
 
-$role = getCurrentRole();
-
-if ($role === 'admin') {
-    header('Location: admin/index.php');
-} elseif ($role === 'teacher') {
-    header('Location: teacher/index.php');
-} elseif ($role === 'student') {
-    header('Location: student/index.php');
+// Handle special actions
+if ($action === 'login') {
+    $controller = new AuthController();
+    $controller->login();
+} elseif ($action === 'register') {
+    $controller = new AuthController();
+    $controller->register();
+} elseif ($action === 'logout') {
+    $controller = new AuthController();
+    $controller->logout();
 } else {
-    header('Location: login.php');
+    // Parse controller.action format
+    $parts = explode('.', $action);
+    $controllerName = ucfirst($parts[0]) . 'Controller';
+    $method = $parts[1] ?? 'index';
+    
+    if (class_exists($controllerName)) {
+        $controller = new $controllerName();
+        if (method_exists($controller, $method)) {
+            $controller->$method();
+        } else {
+            die("Method $method not found in $controllerName");
+        }
+    } else {
+        die("Controller $controllerName not found");
+    }
 }
-exit();
-?>
-
