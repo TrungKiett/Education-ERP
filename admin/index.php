@@ -1,10 +1,10 @@
 <?php
-require_once '../config/database.php';
-require_once '../config/session.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/session.php';
 requireAdmin();
 
 $pageTitle = 'Trang quản trị';
-require_once '../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 $conn = getDBConnection();
 
@@ -39,7 +39,7 @@ closeDBConnection($conn);
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-people"></i> Giáo viên</h5>
                     <h3><?php echo $stats['teachers']; ?></h3>
-                    <a href="teachers.php" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
+                    <a href="../index.php?action=admin.teachers" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@ closeDBConnection($conn);
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-person-badge"></i> Học sinh</h5>
                     <h3><?php echo $stats['students']; ?></h3>
-                    <a href="students.php" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
+                    <a href="../index.php?action=admin.students" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@ closeDBConnection($conn);
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-building"></i> Lớp học</h5>
                     <h3><?php echo $stats['classes']; ?></h3>
-                    <a href="classrooms.php" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
+                    <a href="../index.php?action=admin.classrooms" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@ closeDBConnection($conn);
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-book"></i> Môn học</h5>
                     <h3><?php echo $stats['subjects']; ?></h3>
-                    <a href="subjects.php" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
+                    <a href="../index.php?action=admin.subjects" class="text-white">Xem chi tiết <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -81,31 +81,31 @@ closeDBConnection($conn);
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <a href="teachers.php" class="btn btn-outline-primary w-100 p-3">
+                            <a href="../index.php?action=admin.teachers" class="btn btn-outline-primary w-100 p-3">
                                 <i class="bi bi-people fs-4"></i><br>
                                 Quản lý Giáo viên
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="students.php" class="btn btn-outline-success w-100 p-3">
+                            <a href="../index.php?action=admin.students" class="btn btn-outline-success w-100 p-3">
                                 <i class="bi bi-person-badge fs-4"></i><br>
                                 Quản lý Học sinh
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="classrooms.php" class="btn btn-outline-info w-100 p-3">
+                            <a href="../index.php?action=admin.classrooms" class="btn btn-outline-info w-100 p-3">
                                 <i class="bi bi-building fs-4"></i><br>
                                 Quản lý Lớp học
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="subjects.php" class="btn btn-outline-warning w-100 p-3">
+                            <a href="../index.php?action=admin.subjects" class="btn btn-outline-warning w-100 p-3">
                                 <i class="bi bi-book fs-4"></i><br>
                                 Quản lý Môn học
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="schedule.php" class="btn btn-outline-danger w-100 p-3">
+                            <a href="../index.php?action=admin.schedules" class="btn btn-outline-danger w-100 p-3">
                                 <i class="bi bi-calendar-check fs-4"></i><br>
                                 Phân công Lịch dạy
                             </a>
@@ -116,5 +116,5 @@ closeDBConnection($conn);
         </div>
     </div>
 </div>
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 

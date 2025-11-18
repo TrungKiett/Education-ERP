@@ -2,7 +2,16 @@
 require_once __DIR__ . '/../config/session.php';
 
 abstract class BaseController {
+    protected $pageTitle = 'Hệ thống quản lý giáo dục';
+
+    protected function setPageTitle($title) {
+        $this->pageTitle = $title;
+    }
+
     protected function render($view, $data = []) {
+        if (!isset($data['pageTitle'])) {
+            $data['pageTitle'] = $this->pageTitle;
+        }
         extract($data);
         $viewPath = __DIR__ . "/../views/{$view}.php";
         if (!file_exists($viewPath)) {

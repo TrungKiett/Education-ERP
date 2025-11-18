@@ -1,3 +1,13 @@
+<?php
+$scriptPath = $_SERVER['SCRIPT_NAME'] ?? '';
+$basePath = '';
+
+if (strpos($scriptPath, '/admin/') !== false ||
+    strpos($scriptPath, '/teacher/') !== false ||
+    strpos($scriptPath, '/student/') !== false) {
+    $basePath = '../';
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -27,7 +37,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="<?php echo $basePath; ?>index.php">
                 <i class="bi bi-mortarboard"></i> Hệ thống quản lý giáo dục
             </a>
             <?php if (isLoggedIn()): ?>
@@ -36,20 +46,7 @@
                     <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars(getCurrentUsername()); ?> 
                     (<?php echo ucfirst(getCurrentRole()); ?>)
                 </span>
-                <?php
-                // Determine base path - logout.php is always in root directory
-                // Check if we're in a subdirectory (admin, teacher, student)
-                $scriptPath = $_SERVER['SCRIPT_NAME'];
-                $basePath = '';
-                
-                // If script is in a subdirectory, go up one level
-                if (strpos($scriptPath, '/admin/') !== false || 
-                    strpos($scriptPath, '/teacher/') !== false || 
-                    strpos($scriptPath, '/student/') !== false) {
-                    $basePath = '../';
-                }
-                ?>
-                <a class="btn btn-outline-light btn-sm" href="<?php echo $basePath; ?>logout.php">
+                <a class="btn btn-outline-light btn-sm" href="<?php echo $basePath; ?>index.php?action=logout">
                     <i class="bi bi-box-arrow-right"></i> Đăng xuất
                 </a>
             </div>

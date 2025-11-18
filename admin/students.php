@@ -1,10 +1,10 @@
 <?php
-require_once '../config/database.php';
-require_once '../config/session.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/session.php';
 requireAdmin();
 
 $pageTitle = 'Quản lý Học sinh';
-require_once '../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 $conn = getDBConnection();
 $message = '';
@@ -164,7 +164,7 @@ closeDBConnection($conn);
             </select>
             <button type="submit" class="btn btn-secondary">Lọc</button>
             <?php if ($filterClassId): ?>
-            <a href="students.php" class="btn btn-outline-secondary ms-2">Bỏ lọc</a>
+            <a href="../index.php?action=admin.students" class="btn btn-outline-secondary ms-2">Bỏ lọc</a>
             <?php endif; ?>
         </form>
     </div>
@@ -381,5 +381,5 @@ function deleteStudent(id, name) {
     new bootstrap.Modal(document.getElementById('deleteStudentModal')).show();
 }
 </script>
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 

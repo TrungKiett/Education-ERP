@@ -1,10 +1,10 @@
 <?php
-require_once '../config/database.php';
-require_once '../config/session.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/session.php';
 requireAdmin();
 
 $pageTitle = 'Phân công Lịch dạy';
-require_once '../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 $conn = getDBConnection();
 $message = '';
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $message = 'Phân công lịch dạy thành công!';
                             $messageType = 'success';
                             // Redirect to show the newly created schedule
-                            header('Location: schedule.php?date=' . urlencode($scheduleDate));
+                            header('Location: ?action=admin.schedules&date=' . urlencode($scheduleDate));
                             exit();
                         } else {
                             $message = 'Lỗi khi phân công lịch dạy: ' . $conn->error;
@@ -274,7 +274,7 @@ closeDBConnection($conn);
                     <label class="form-label">&nbsp;</label>
                     <div>
                         <button type="submit" class="btn btn-secondary w-100">Lọc</button>
-                        <a href="schedule.php" class="btn btn-outline-secondary w-100 mt-2">Bỏ lọc</a>
+                        <a href="../index.php?action=admin.schedules" class="btn btn-outline-secondary w-100 mt-2">Bỏ lọc</a>
                     </div>
                 </div>
             </form>
@@ -463,5 +463,5 @@ function deleteSchedule(id, name) {
     new bootstrap.Modal(document.getElementById('deleteScheduleModal')).show();
 }
 </script>
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 

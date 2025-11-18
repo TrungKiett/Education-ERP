@@ -1,10 +1,10 @@
 <?php
-require_once '../config/database.php';
-require_once '../config/session.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/session.php';
 requireAdmin();
 
 $pageTitle = 'Gán môn dạy cho Giáo viên';
-require_once '../includes/header.php';
+require_once __DIR__ . '/../includes/header.php';
 
 $conn = getDBConnection();
 $message = '';
@@ -13,7 +13,7 @@ $messageType = '';
 $teacherId = $_GET['teacher_id'] ?? null;
 
 if (!$teacherId) {
-    header('Location: teachers.php');
+    header('Location: ?action=admin.teachers');
     exit();
 }
 
@@ -24,7 +24,7 @@ $teacherStmt->execute();
 $teacherResult = $teacherStmt->get_result();
 
 if ($teacherResult->num_rows === 0) {
-    header('Location: teachers.php');
+    header('Location: ?action=admin.teachers');
     exit();
 }
 
@@ -116,7 +116,7 @@ closeDBConnection($conn);
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="bi bi-book"></i> Gán môn dạy cho: <?php echo htmlspecialchars($teacher['full_name']); ?></h2>
-        <a href="teachers.php" class="btn btn-secondary">
+        <a href="../index.php?action=admin.teachers" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Quay lại
         </a>
     </div>
@@ -202,5 +202,5 @@ closeDBConnection($conn);
         </div>
     </div>
 </div>
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
 
