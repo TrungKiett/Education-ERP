@@ -60,6 +60,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $stmt->close();
             }
+        } elseif ($action === 'add_students') {
+            $classId = $_POST['class_id'] ?? 0;
+            $studentIds = $_POST['student_ids'] ?? [];
+            
+            if ($classId <= 0) {
+                $message = 'Vui lòng chọn lớp học!';
+                $messageType = 'danger';
+            } elseif (empty($studentIds) || !is_array($studentIds)) {
+                $message = 'Vui lòng chọn ít nhất một học sinh!';
+                $messageType = 'danger';
+            } else {
+                $successCount = 0;
+                $errorCount = 0;
+                
+                foreach ($studentIds as $studentId) {
+                    $studentId = intval($studentId);
+                    if ($studentId > 0) {
+                        // Check if student exists
+                        $checkStmt = $conn->prepare("SELECT id, class_id FROM students WHERE id = ?");
+                        $checkStmt->bind_param("i", $studentId);
+                        $checkStmt->execute();
+                        $result = $checkStmt->get_result();
+                        $student = $result->fetch_assoc();
+                        $checkStmt->close();
+                        
+                        if ($student) {
+                            // Update student's class_id
+                            $updateStmt = $conn->prepare("UPDATE students SET class_id = ? WHERE id = ?");
+                            $updateStmt->bind_param("ii", $classId, $studentId);
+                            
+                            if ($updateStmt->execute()) {
+                                $successCount++;
+                            } else {
+                                $errorCount++;
+                            }
+                            $updateStmt->close();
+                        } else {
+                            $errorCount++;
+                        }
+                    }
+                }
+                
+                if ($successCount > 0) {
+                    $message = "Đã thêm thành công {$successCount} học sinh vào lớp!";
+                    if ($errorCount > 0) {
+                        $message .= " ({$errorCount} học sinh gặp lỗi)";
+                    }
+                    $messageType = 'success';
+                } else {
+                    $message = 'Không thể thêm học sinh vào lớp!';
+                    $messageType = 'danger';
+                }
+            }
         } elseif ($action === 'delete') {
             $id = $_POST['id'] ?? 0;
             
@@ -101,6 +154,19 @@ $result = $conn->query("
 ");
 while ($row = $result->fetch_assoc()) {
     $classrooms[] = $row;
+}
+
+// Get all students (for adding to class)
+$allStudents = [];
+$studentResult = $conn->query("
+    SELECT s.id, s.code, s.full_name, s.email, s.phone, 
+           c.name as current_class_name, s.class_id
+    FROM students s
+    LEFT JOIN classrooms c ON s.class_id = c.id
+    ORDER BY s.full_name
+");
+while ($row = $studentResult->fetch_assoc()) {
+    $allStudents[] = $row;
 }
 
 closeDBConnection($conn);
@@ -153,6 +219,9 @@ closeDBConnection($conn);
                                 <a href="../index.php?action=admin.students&class_id=<?php echo $classroom['id']; ?>" class="btn btn-sm btn-info" title="Xem học sinh">
                                     <i class="bi bi-people"></i>
                                 </a>
+                                <button class="btn btn-sm btn-success" onclick="addStudentsToClass(<?php echo $classroom['id']; ?>, '<?php echo htmlspecialchars($classroom['name']); ?>')" title="Thêm học sinh">
+                                    <i class="bi bi-person-plus"></i>
+                                </button>
                                 <button class="btn btn-sm btn-warning" onclick="editClassroom(<?php echo htmlspecialchars(json_encode($classroom)); ?>)" title="Sửa">
                                     <i class="bi bi-pencil"></i>
                                 </button>
@@ -283,6 +352,142 @@ function deleteClassroom(id, name) {
     document.getElementById('delete_name').textContent = name;
     new bootstrap.Modal(document.getElementById('deleteClassroomModal')).show();
 }
+
+function addStudentsToClass(classId, className) {
+    document.getElementById('add_students_class_id').value = classId;
+    document.getElementById('add_students_class_name').textContent = className;
+    
+    // Clear previous selections
+    const checkboxes = document.querySelectorAll('#addStudentsModal input[type="checkbox"][name="student_ids[]"]');
+    checkboxes.forEach(cb => cb.checked = false);
+    
+    new bootstrap.Modal(document.getElementById('addStudentsModal')).show();
+}
+</script>
+
+<!-- Add Students to Class Modal -->
+<div class="modal fade" id="addStudentsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" id="addStudentsForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm học sinh vào lớp</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="action" value="add_students">
+                    <input type="hidden" name="class_id" id="add_students_class_id">
+                    <p class="mb-3">
+                        <strong>Lớp:</strong> <span id="add_students_class_name"></span>
+                    </p>
+                    
+                    <!-- Search box -->
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="studentSearch" 
+                               placeholder="Tìm kiếm học sinh (tên, mã, email, SĐT)..."
+                               onkeyup="filterStudents()">
+                    </div>
+                    
+                    <!-- Student list -->
+                    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 0.375rem; padding: 10px;">
+                        <div class="mb-2">
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                            <label for="selectAll" class="fw-semibold">Chọn tất cả</label>
+                        </div>
+                        <hr class="my-2">
+                        <?php if (empty($allStudents)): ?>
+                        <p class="text-muted text-center">Không có học sinh nào</p>
+                        <?php else: ?>
+                        <div id="studentList">
+                            <?php foreach ($allStudents as $student): ?>
+                            <div class="student-item mb-2 p-2 border rounded" data-student-id="<?php echo $student['id']; ?>">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="student_ids[]" 
+                                           value="<?php echo $student['id']; ?>" 
+                                           id="student_<?php echo $student['id']; ?>">
+                                    <label class="form-check-label w-100" for="student_<?php echo $student['id']; ?>">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong><?php echo htmlspecialchars($student['full_name']); ?></strong>
+                                                <?php if ($student['code']): ?>
+                                                    <br><small class="text-muted">Mã: <?php echo htmlspecialchars($student['code']); ?></small>
+                                                <?php endif; ?>
+                                                <?php if ($student['email']): ?>
+                                                    <br><small class="text-muted">Email: <?php echo htmlspecialchars($student['email']); ?></small>
+                                                <?php endif; ?>
+                                                <?php if ($student['phone']): ?>
+                                                    <br><small class="text-muted">SĐT: <?php echo htmlspecialchars($student['phone']); ?></small>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="text-end">
+                                                <?php if ($student['current_class_name']): ?>
+                                                    <span class="badge bg-info"><?php echo htmlspecialchars($student['current_class_name']); ?></span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-secondary">Chưa có lớp</span>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-person-plus"></i> Thêm học sinh đã chọn
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterStudents() {
+    const searchTerm = document.getElementById('studentSearch').value.toLowerCase();
+    const studentItems = document.querySelectorAll('.student-item');
+    
+    studentItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('#addStudentsModal input[type="checkbox"][name="student_ids[]"]');
+    
+    checkboxes.forEach(cb => {
+        if (cb.closest('.student-item').style.display !== 'none') {
+            cb.checked = selectAll.checked;
+        }
+    });
+}
+
+// Update select all checkbox when individual checkboxes change
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('#addStudentsModal input[type="checkbox"][name="student_ids[]"]');
+    const selectAll = document.getElementById('selectAll');
+    
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            const visibleCheckboxes = Array.from(checkboxes).filter(c => 
+                c.closest('.student-item').style.display !== 'none'
+            );
+            const checkedCount = visibleCheckboxes.filter(c => c.checked).length;
+            selectAll.checked = checkedCount === visibleCheckboxes.length && visibleCheckboxes.length > 0;
+        });
+    });
+});
 </script>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
 

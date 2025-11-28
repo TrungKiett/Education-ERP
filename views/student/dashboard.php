@@ -12,8 +12,17 @@ if (isset($error)): ?>
 $daysOfWeek = ['', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
 ?>
 <div class="container-fluid mt-4">
-    <h2><i class="bi bi-calendar-week"></i> Thời khóa biểu của: <?php echo htmlspecialchars($student['full_name']); ?></h2>
-    <p class="text-muted">Lớp: <?php echo htmlspecialchars($classroom['name']); ?></p>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2><i class="bi bi-calendar-week"></i> Thời khóa biểu của: <?php echo htmlspecialchars($student['full_name']); ?></h2>
+            <p class="text-muted mb-0">Lớp: <?php echo htmlspecialchars($classroom['name']); ?></p>
+        </div>
+        <div>
+            <a href="?action=student.invoices" class="btn btn-primary">
+                <i class="bi bi-receipt"></i> Hóa đơn Học phí
+            </a>
+        </div>
+    </div>
     <hr>
     
     <!-- Timetable -->

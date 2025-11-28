@@ -55,6 +55,14 @@ if ($action === 'login') {
 } elseif ($action === 'logout') {
     $controller = new AuthController();
     $controller->logout();
+} elseif ($action === 'enrollment' || $action === 'enrollment.form') {
+    // Public enrollment form
+    $controller = new EnrollmentController();
+    $controller->enrollmentForm();
+} elseif ($action === 'student.invoices') {
+    // Student invoices
+    $controller = new StudentController();
+    $controller->invoices();
 } else {
     // Parse controller.action format
     $parts = explode('.', $action);

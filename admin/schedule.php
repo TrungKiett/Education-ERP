@@ -66,14 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $roomCheckStmt->close();
                     }
                     
-                    // 4. Check if teacher can teach this subject (from teaching_assignments with class_id)
-                    $subjectCheckStmt = $conn->prepare("SELECT id FROM teaching_assignments WHERE teacher_id = ? AND subject_id = ? AND class_id = ?");
-                    $subjectCheckStmt->bind_param("iii", $teacherId, $subjectId, $classId);
-                    $subjectCheckStmt->execute();
-                    if ($subjectCheckStmt->get_result()->num_rows === 0) {
-                        $conflicts[] = 'Giáo viên chưa được gán môn học này cho lớp này';
-                    }
-                    $subjectCheckStmt->close();
+                    // Note: Removed teaching assignment check - allow any teacher to teach any subject for any class
                     
                     if (!empty($conflicts)) {
                         $message = 'Lỗi: ' . implode(', ', $conflicts);
@@ -350,7 +343,7 @@ closeDBConnection($conn);
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Lớp học <span class="text-danger">*</span></label>
-                            <select class="form-select" name="class_id" id="form_class_id" required onchange="updateSubjectOptions()">
+                            <select class="form-select" name="class_id" id="form_class_id" required>
                                 <option value="">Chọn lớp...</option>
                                 <?php foreach ($classrooms as $class): ?>
                                 <option value="<?php echo $class['id']; ?>"><?php echo htmlspecialchars($class['name']); ?></option>
@@ -359,10 +352,10 @@ closeDBConnection($conn);
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Giáo viên <span class="text-danger">*</span></label>
-                            <select class="form-select" name="teacher_id" id="form_teacher_id" required onchange="updateSubjectOptions()">
+                            <select class="form-select" name="teacher_id" id="form_teacher_id" required>
                                 <option value="">Chọn giáo viên...</option>
-                                <?php foreach ($teacherSubjects as $tid => $tdata): ?>
-                                <option value="<?php echo $tid; ?>"><?php echo htmlspecialchars($tdata['name']); ?></option>
+                                <?php foreach ($teachers as $teacher): ?>
+                                <option value="<?php echo $teacher['id']; ?>"><?php echo htmlspecialchars($teacher['full_name']); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -372,8 +365,10 @@ closeDBConnection($conn);
                             <label class="form-label">Môn học <span class="text-danger">*</span></label>
                             <select class="form-select" name="subject_id" id="form_subject_id" required>
                                 <option value="">Chọn môn học...</option>
+                                <?php foreach ($subjects as $subject): ?>
+                                <option value="<?php echo $subject['id']; ?>"><?php echo htmlspecialchars($subject['name']); ?></option>
+                                <?php endforeach; ?>
                             </select>
-                            <small class="text-muted">Chỉ hiển thị môn học đã được gán cho giáo viên với lớp đã chọn</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Ngày dạy <span class="text-danger">*</span></label>
@@ -433,29 +428,6 @@ closeDBConnection($conn);
 </div>
 
 <script>
-const teacherSubjectsData = <?php echo json_encode($teacherSubjects); ?>;
-
-function updateSubjectOptions() {
-    const teacherId = document.getElementById('form_teacher_id').value;
-    const classId = document.getElementById('form_class_id').value;
-    const subjectSelect = document.getElementById('form_subject_id');
-    
-    // Clear options
-    subjectSelect.innerHTML = '<option value="">Chọn môn học...</option>';
-    
-    if (teacherId && teacherSubjectsData[teacherId] && classId) {
-        const subjects = teacherSubjectsData[teacherId].subjects;
-        // Filter subjects by class_id
-        subjects.forEach(subject => {
-            if (subject.class_id == classId) {
-                const option = document.createElement('option');
-                option.value = subject.id;
-                option.textContent = subject.name + ' (' + subject.class_name + ')';
-                subjectSelect.appendChild(option);
-            }
-        });
-    }
-}
 
 function deleteSchedule(id, name) {
     document.getElementById('delete_id').value = id;

@@ -12,11 +12,12 @@ abstract class BaseController {
         if (!isset($data['pageTitle'])) {
             $data['pageTitle'] = $this->pageTitle;
         }
-        extract($data);
-        $viewPath = __DIR__ . "/../views/{$view}.php";
+        $viewFile = $view;
+        $viewPath = __DIR__ . "/../views/{$viewFile}.php";
         if (!file_exists($viewPath)) {
             die("View not found: $viewPath");
         }
+        extract($data);
         require_once $viewPath;
     }
     

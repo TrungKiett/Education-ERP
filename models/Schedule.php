@@ -24,6 +24,18 @@ class Schedule extends Model {
             $types .= 's';
         }
         
+        if (!empty($filters['date_from'])) {
+            $sql .= " AND ts.schedule_date >= ?";
+            $params[] = $filters['date_from'];
+            $types .= 's';
+        }
+        
+        if (!empty($filters['date_to'])) {
+            $sql .= " AND ts.schedule_date <= ?";
+            $params[] = $filters['date_to'];
+            $types .= 's';
+        }
+        
         if (!empty($filters['class_id'])) {
             $sql .= " AND ts.class_id = ?";
             $params[] = $filters['class_id'];
