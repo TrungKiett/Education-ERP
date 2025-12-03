@@ -20,29 +20,17 @@ spl_autoload_register(function ($class) {
 });
 
 // Get action from URL
-$action = $_GET['action'] ?? 'dashboard';
+// Mặc định truy cập sẽ vào trang admin dashboard, không yêu cầu đăng nhập
+$action = $_GET['action'] ?? 'admin.dashboard';
 
 // Route to appropriate controller
 $parts = explode('.', $action);
 $controllerName = ucfirst($parts[0]) . 'Controller';
 $method = $parts[1] ?? 'index';
 
-// Default routing
+// Default routing: nếu action là 'dashboard' hoặc rỗng thì luôn chuyển về admin dashboard
 if ($action === 'dashboard' || $action === '') {
-    if (isLoggedIn()) {
-        $role = getCurrentRole();
-        if ($role === 'admin') {
-            $action = 'admin.dashboard';
-        } elseif ($role === 'teacher') {
-            $action = 'teacher.dashboard';
-        } elseif ($role === 'student') {
-            $action = 'student.dashboard';
-        } else {
-            $action = 'login';
-        }
-    } else {
-        $action = 'login';
-    }
+    $action = 'admin.dashboard';
 }
 
 // Handle special actions
