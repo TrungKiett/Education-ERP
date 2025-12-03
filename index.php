@@ -23,6 +23,11 @@ spl_autoload_register(function ($class) {
 // Mặc định truy cập sẽ vào trang đăng nhập
 $action = $_GET['action'] ?? 'login';
 
+// Đường dẫn cố định tới giao diện đăng nhập
+// Có thể sử dụng biến này trong các view / header nếu cần:
+//   <a href="<?php echo $loginUrl; ?>">Đăng nhập</a>
+$loginUrl = 'index.php?action=login';
+
 // Route to appropriate controller
 $parts = explode('.', $action);
 $controllerName = ucfirst($parts[0]) . 'Controller';
